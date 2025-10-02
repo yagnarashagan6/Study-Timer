@@ -1945,13 +1945,13 @@
       function playGameFromNotification(gameType) {
         if (gameType === "tic-tac-toe") {
           closeGameNotification();
-          openGame("tic-tac-toe.html", "⭕ Tic-Tac-Toe");
+          openGame("./tic-tac-toe.html", "⭕ Tic-Tac-Toe");
         } else if (gameType === "tricky-cup" && gamesUnlocked >= 2) {
           closeGameNotification();
-          openGame("Tricky-Cup.html", "🏆 Tricky Cup");
+          openGame("./Tricky-Cup.html", "🏆 Tricky Cup");
         } else if (gameType === "memory-match" && gamesUnlocked >= 3) {
           closeGameNotification();
-          openGame("Memory-Match.html", "🧠 Memory Match");
+          openGame("./Memory-Match.html", "🧠 Memory Match");
         }
       }
 
@@ -1972,19 +1972,23 @@
         // Clear the iframe first, then set the new source
         gameIframe.src = "";
         setTimeout(() => {
-          gameIframe.src = gameSrc;
+          // Ensure we have the correct path for the game
+          const fullGamePath = gameSrc;
+          console.log("Loading game:", fullGamePath); // Debug log
+          gameIframe.src = fullGamePath;
 
           // Remove loading animation when loaded
           gameIframe.onload = function () {
             gameIframe.style.background = "white";
             gameIframe.style.animation = "none";
+            console.log("Game loaded successfully:", fullGamePath);
           };
 
           // Handle loading errors
           gameIframe.onerror = function () {
             gameIframe.style.background = "#ffebee";
             gameIframe.style.animation = "none";
-            console.error("Failed to load game:", gameSrc);
+            console.error("Failed to load game:", fullGamePath);
           };
         }, 100);
 
