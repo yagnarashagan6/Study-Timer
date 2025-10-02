@@ -9,36 +9,30 @@
   # Environment variables (if needed in the future)
   NODE_VERSION = "18"
 
-# Redirect rules
-[[redirects]]
-  # Redirect root to your main Study Timer app
-  from = "/"
-  to = "/games/Study-Timer.html"
-  status = 200
-
+# Redirect rules for easy access
 [[redirects]]
   # Redirect /study to main app
   from = "/study"
   to = "/games/Study-Timer.html"
-  status = 200
+  status = 301
 
 [[redirects]]
   # Redirect /memory to Memory Match game
   from = "/memory"
   to = "/games/Memory-Match.html"
-  status = 200
+  status = 301
 
 [[redirects]]
   # Redirect /tictactoe to Tic Tac Toe game
   from = "/tictactoe"
   to = "/games/tic-tac-toe.html"
-  status = 200
+  status = 301
 
 [[redirects]]
   # Redirect /tricky to Tricky Cup game
   from = "/tricky"
   to = "/games/Tricky-Cup.html"
-  status = 200
+  status = 301
 
 # Headers for better performance and security
 [[headers]]
