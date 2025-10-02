@@ -44,8 +44,7 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    # Security headers
-    X-Frame-Options = "DENY"
+    # Security headers (less restrictive)
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
@@ -56,8 +55,15 @@
 [[headers]]
   for = "/*.html"
   [headers.values]
-    # HTML files should be cached for shorter periods
-    Cache-Control = "public, max-age=3600"
+    # HTML files should be cached for shorter periods and allow framing
+    Cache-Control = "public, max-age=300"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[headers]]
+  for = "/games/*.html"
+  [headers.values]
+    # Game files should allow iframe embedding and have minimal caching
+    Cache-Control = "public, max-age=60"
 
 [[headers]]
   for = "/*.css"
@@ -75,11 +81,11 @@
     # Images can be cached for longer
     Cache-Control = "public, max-age=31536000"
 
-# Error pages (optional)
-# [[redirects]]
-#   from = "/*"
-#   to = "/404.html"
-#   status = 404
+# Error pages and catch-all redirect
+[[redirects]]
+  from = "/*"
+  to = "/games/Study-Timer.html"
+  status = 404
 
 # Branch-specific deploy settings (optional)
 [context.production]
