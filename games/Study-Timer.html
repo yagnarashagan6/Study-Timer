@@ -414,6 +414,17 @@
       .reset-btn {
         background: #dc3545;
         color: white;
+        /* Match .control-btn padding exactly */
+        padding: 1.2rem 2.5rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        min-width: 120px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .reset-btn:hover {
@@ -450,7 +461,7 @@
       }
 
       @media (min-width: 1280px) {
-        .control-btn {
+        .control-btn .reset-btn {
           padding: 1.5rem 3rem;
           font-size: 1.2rem;
         }
@@ -818,25 +829,33 @@
       .game-container-overlay:fullscreen .game-iframe {
         height: calc(100vh - 80px);
         max-width: 100%;
+        width: 100%;
         border-radius: 0;
+        min-height: unset;
       }
 
       .game-container-overlay:-webkit-full-screen .game-iframe {
         height: calc(100vh - 80px);
         max-width: 100%;
+        width: 100%;
         border-radius: 0;
+        min-height: unset;
       }
 
       .game-container-overlay:-moz-full-screen .game-iframe {
         height: calc(100vh - 80px);
         max-width: 100%;
+        width: 100%;
         border-radius: 0;
+        min-height: unset;
       }
 
       .game-container-overlay:-ms-fullscreen .game-iframe {
         height: calc(100vh - 80px);
         max-width: 100%;
+        width: 100%;
         border-radius: 0;
+        min-height: unset;
       }
 
       .game-header {
@@ -885,10 +904,22 @@
         width: 100%;
         max-width: 1200px;
         height: calc(100vh - 140px);
+        min-height: 500px;
         border: none;
         border-radius: 0 0 10px 10px;
         background: white;
         box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        transition: background 0.3s ease;
+      }
+
+      @keyframes loading {
+        0% {
+          background-position: 0 0, 10px 10px;
+        }
+        100% {
+          background-position: 20px 20px, 30px 30px;
+        }
       }
 
       @media (max-width: 768px) {
@@ -913,6 +944,7 @@
 
         .game-iframe {
           height: calc(100vh - 180px);
+          min-height: 400px;
         }
       }
 
@@ -1087,9 +1119,7 @@
             </button>
           </div>
           <div class="timer-controls-row2">
-            <button class="control-btn reset-btn" onclick="resetTimer()">
-              Reset
-            </button>
+            <button class="reset-btn" onclick="resetTimer()">Reset</button>
           </div>
         </div>
       </div>
@@ -1203,7 +1233,17 @@
           </button>
         </div>
       </div>
-      <iframe id="gameIframe" class="game-iframe" src=""></iframe>
+      <iframe
+        id="gameIframe"
+        class="game-iframe"
+        src=""
+        frameborder="0"
+        allowfullscreen
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+        scrolling="auto"
+        loading="lazy"
+      >
+      </iframe>
     </div>
 
     <!-- Game Notification Popup -->
@@ -1848,7 +1888,33 @@
         const gameTitleElement = document.getElementById("currentGameTitle");
 
         gameTitleElement.textContent = gameTitle;
-        gameIframe.src = gameSrc;
+
+        // Add loading indicator
+        gameIframe.style.background =
+          "linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%), linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%)";
+        gameIframe.style.backgroundSize = "20px 20px";
+        gameIframe.style.backgroundPosition = "0 0, 10px 10px";
+        gameIframe.style.animation = "loading 1s linear infinite";
+
+        // Clear the iframe first, then set the new source
+        gameIframe.src = "";
+        setTimeout(() => {
+          gameIframe.src = gameSrc;
+
+          // Remove loading animation when loaded
+          gameIframe.onload = function () {
+            gameIframe.style.background = "white";
+            gameIframe.style.animation = "none";
+          };
+
+          // Handle loading errors
+          gameIframe.onerror = function () {
+            gameIframe.style.background = "#ffebee";
+            gameIframe.style.animation = "none";
+            console.error("Failed to load game:", gameSrc);
+          };
+        }, 100);
+
         gameContainer.classList.add("show");
         isGameOpen = true;
 
@@ -1866,7 +1932,14 @@
         const gameIframe = document.getElementById("gameIframe");
 
         gameContainer.classList.remove("show");
+
+        // Reset iframe state
         gameIframe.src = "";
+        gameIframe.style.background = "white";
+        gameIframe.style.animation = "none";
+        gameIframe.onload = null;
+        gameIframe.onerror = null;
+
         isGameOpen = false;
       }
 
