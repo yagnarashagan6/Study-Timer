@@ -599,6 +599,22 @@
         background: #0056b3;
       }
 
+      /* Games Gallery styling */
+      .games-gallery {
+        grid-column: 1 / -1;
+        margin-top: 110px;
+      }
+
+      .games-gallery .interval-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .games-gallery .interval-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0, 123, 255, 0.2);
+      }
+
       /* Game Notification Popup */
       .game-notification {
         position: fixed;
@@ -766,22 +782,82 @@
       @media (max-width: 768px) {
         .game-notification {
           width: 95%;
-          padding: 1.5rem;
+          padding: 1.2rem;
+          max-height: 85vh;
+          overflow-y: auto;
         }
 
         .notification-title {
-          font-size: 1.5rem;
+          font-size: 1.4rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .notification-subtitle {
+          font-size: 0.9rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .notification-header {
+          margin-bottom: 1rem;
+        }
+
+        .notification-games {
+          gap: 0.8rem;
+          margin-bottom: 1rem;
         }
 
         .notification-game-item {
-          flex-direction: column;
-          text-align: center;
-          gap: 1rem;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1rem;
+          gap: 0.8rem;
+          text-align: left;
         }
 
         .notification-game-info {
-          flex-direction: column;
-          gap: 0.5rem;
+          flex-direction: row;
+          align-items: center;
+          gap: 0.8rem;
+          flex: 1;
+        }
+
+        .notification-game-icon {
+          font-size: 1.5rem;
+          flex-shrink: 0;
+        }
+
+        .notification-game-details {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .notification-game-details h4 {
+          font-size: 1rem;
+          margin-bottom: 0.1rem;
+          line-height: 1.2;
+        }
+
+        .notification-game-details p {
+          font-size: 0.75rem;
+          line-height: 1.2;
+        }
+
+        .notification-play-btn {
+          padding: 0.5rem 0.8rem;
+          font-size: 0.8rem;
+          border-radius: 15px;
+          flex-shrink: 0;
+        }
+
+        .notification-lock-icon {
+          font-size: 1.2rem;
+          flex-shrink: 0;
+        }
+
+        .notification-close {
+          padding: 0.7rem 1.5rem;
+          font-size: 0.9rem;
         }
       }
 
@@ -1066,21 +1142,18 @@
     </style>
   </head>
   <body>
-    <!-- Header -->
     <header class="header">
       <div class="logo">
         <div class="timer-icon">⏱</div>
         Study Timer
       </div>
       <nav class="nav">
-        <!-- MODIFIED: Nav links with IDs for JS control -->
         <a class="nav-link" id="home-btn">Home</a>
         <a class="nav-link" id="focus-modes-btn">Focus Modes</a>
         <a class="nav-link" id="stats-btn">Stats</a>
         <a class="nav-link" id="games-btn">Games</a>
         <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
       </nav>
-      <!-- Hamburger icon for mobile -->
       <div
         class="hamburger"
         id="hamburgerMenu"
@@ -1091,7 +1164,6 @@
         <span></span>
         <span></span>
       </div>
-      <!-- Mobile nav drawer -->
       <nav class="mobile-nav" id="mobileNav">
         <span class="sidebar-spacer"></span>
         <a class="nav-link" id="mobile-home-btn">Home</a>
@@ -1102,11 +1174,8 @@
       </nav>
     </header>
 
-    <!-- Main Container -->
     <div class="main-container">
-      <!-- Timer Dashboard -->
       <div class="timer-dashboard">
-        <!-- NEW: Motivational quote moved here -->
         <p class="quote" id="motivationalQuote">
           "Success is the sum of small efforts repeated day in and day out."
         </p>
@@ -1132,7 +1201,6 @@
         </div>
       </div>
 
-      <!-- Stats display section (below timer, initially hidden) -->
       <div class="stats-display" id="statsDisplay">
         <div class="stat">
           <span>📊</span>
@@ -1148,7 +1216,6 @@
         </div>
       </div>
 
-      <!-- Interval Selector (initially hidden) -->
       <div class="interval-selector" style="display: none">
         <h3 class="selector-title">Choose Your Focus</h3>
         <div class="intervals-grid">
@@ -1216,9 +1283,9 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Game Container (iframe) -->
+      <div class="games-gallery" id="games-gallery" style="display: none;"></div>
+
     <div class="game-container-overlay" id="gameContainerOverlay">
       <div class="game-header">
         <div class="game-header-info">
@@ -1254,7 +1321,6 @@
       </iframe>
     </div>
 
-    <!-- Game Notification Popup -->
     <div class="notification-overlay" id="notificationOverlay"></div>
     <div class="game-notification" id="gameNotification">
       <div class="notification-header">
@@ -1303,8 +1369,6 @@
       </button>
     </div>
 
-    <!-- Footer -->
-    <!-- MODIFIED: Footer content has been removed as requested -->
     <footer class="footer"></footer>
 
     <script>
@@ -1552,6 +1616,7 @@
           e.preventDefault();
           timerDashboard.style.display = "none";
           intervalSelector.style.display = "block";
+          document.getElementById("games-gallery").style.display = "none";
           // Hide stats when switching to focus modes
           statsDisplay.style.display = "none";
         });
@@ -1560,17 +1625,17 @@
           const computedStyle = window.getComputedStyle(statsDisplay);
           const isHidden = computedStyle.display === "none";
           if (timerDashboard.style.display === "none") {
-            // If we're in focus modes, switch to timer view first
+            // If we're in focus modes or games gallery, switch to timer view first
             showTimerView();
           }
           // Always show/hide stats when clicked
           statsDisplay.style.display = isHidden ? "flex" : "none";
         });
+        // MODIFIED: Games button logic
         gamesBtn.addEventListener("click", (e) => {
           e.preventDefault();
           if (isBreakTime) {
             showGameNotification();
-            removeGamesWarning();
           } else {
             showGamesWarning();
           }
@@ -1599,6 +1664,7 @@
           e.preventDefault();
           timerDashboard.style.display = "none";
           intervalSelector.style.display = "block";
+          document.getElementById("games-gallery").style.display = "none";
           // Hide stats when switching to focus modes
           statsDisplay.style.display = "none";
           setActiveMobileNav(mobileFocusModesBtn);
@@ -1609,7 +1675,7 @@
           const computedStyle = window.getComputedStyle(statsDisplay);
           const isHidden = computedStyle.display === "none";
           if (timerDashboard.style.display === "none") {
-            // If we're in focus modes, switch to timer view first
+            // If we're in focus modes or games gallery, switch to timer view first
             showTimerView();
           }
           // Always show/hide stats when clicked
@@ -1617,66 +1683,18 @@
           setActiveMobileNav(mobileStatsBtn);
           closeMobileNav();
         });
+        // MODIFIED: Mobile games button logic
         mobileGamesBtn.addEventListener("click", (e) => {
           e.preventDefault();
           if (isBreakTime) {
             showGameNotification();
-            removeGamesWarning();
           } else {
             showGamesWarning();
           }
           setActiveMobileNav(mobileGamesBtn);
           closeMobileNav();
         });
-        // Show warning message in the game notification popup
-        function showGamesWarning() {
-          const notification = document.getElementById("gameNotification");
-          const overlay = document.getElementById("notificationOverlay");
-          // Remove any previous warning
-          removeGamesWarning();
-          // Hide all children except the warning and close button
-          Array.from(notification.children).forEach((child) => {
-            if (
-              child.id !== "gamesWarningMsg" &&
-              !child.classList.contains("notification-close")
-            ) {
-              child.style.display = "none";
-            }
-          });
-          // Insert warning at the top of the popup
-          let warning = document.getElementById("gamesWarningMsg");
-          if (!warning) {
-            warning = document.createElement("div");
-            warning.id = "gamesWarningMsg";
-            warning.style.background = "#ffc107";
-            warning.style.color = "#333";
-            warning.style.padding = "1rem";
-            warning.style.borderRadius = "10px";
-            warning.style.marginBottom = "1rem";
-            warning.style.fontWeight = "bold";
-            warning.style.textAlign = "center";
-            warning.textContent = "Games are only available during break time!";
-            notification.insertBefore(warning, notification.firstChild);
-          } else {
-            warning.style.display = "block";
-          }
-          notification.classList.add("show");
-          overlay.classList.add("show");
-        }
 
-        function removeGamesWarning() {
-          const notification = document.getElementById("gameNotification");
-          const warning = document.getElementById("gamesWarningMsg");
-          if (warning && warning.parentNode) {
-            warning.parentNode.removeChild(warning);
-          }
-          // Restore all children except the warning
-          Array.from(notification.children).forEach((child) => {
-            if (child.id !== "gamesWarningMsg") {
-              child.style.display = "";
-            }
-          });
-        }
         // Fix fullscreen button for game iframe
         const fullscreenBtn = document.getElementById("fullscreenGameBtn");
         const gameOverlay = document.getElementById("gameContainerOverlay");
@@ -1691,8 +1709,11 @@
       function showTimerView() {
         timerDashboard.style.display = "block";
         intervalSelector.style.display = "none";
+        document.getElementById("games-gallery").style.display = "none";
         // Don't automatically hide stats when returning to timer view
       }
+
+      // REMOVED: showGamesGallery function is no longer needed
 
       function updateDisplay() {
         const minutes = Math.floor(timeLeft / 60);
@@ -1807,7 +1828,51 @@
         updateQuote();
       }
 
+      // NEW: Function to show a warning when trying to access games during focus time
+      function showGamesWarning() {
+        const notification = document.getElementById("gameNotification");
+        const overlay = document.getElementById("notificationOverlay");
+        // Ensure clean state before modifying
+        removeGamesWarning();
+        // Hide all original children except the close button
+        Array.from(notification.children).forEach((child) => {
+          if (!child.classList.contains("notification-close")) {
+            child.style.display = "none";
+          }
+        });
+        // Create and add the warning message
+        const warning = document.createElement("div");
+        warning.id = "gamesWarningMsg";
+        warning.style.background = "#ffc107";
+        warning.style.color = "#333";
+        warning.style.padding = "1rem";
+        warning.style.borderRadius = "10px";
+        warning.style.marginBottom = "1rem";
+        warning.style.fontWeight = "bold";
+        warning.style.textAlign = "center";
+        warning.textContent = "Games are only available during break time!";
+        notification.insertBefore(warning, notification.firstChild);
+
+        notification.classList.add("show");
+        overlay.classList.add("show");
+      }
+
+      // NEW: Function to clean up the warning message from the notification
+      function removeGamesWarning() {
+        const notification = document.getElementById("gameNotification");
+        const warning = document.getElementById("gamesWarningMsg");
+        if (warning) {
+          warning.remove();
+        }
+        // Restore visibility of all other children
+        Array.from(notification.children).forEach((child) => {
+          child.style.display = "";
+        });
+      }
+
+      // MODIFIED: This function now cleans up any warning before showing
       function showGameNotification() {
+        removeGamesWarning(); // Clean up before showing
         const notification = document.getElementById("gameNotification");
         const overlay = document.getElementById("notificationOverlay");
 
@@ -1880,10 +1945,10 @@
       function playGameFromNotification(gameType) {
         if (gameType === "tic-tac-toe") {
           closeGameNotification();
-          openGame("/games/tic-tac-toe.html", "⭕ Tic-Tac-Toe");
+          openGame("tic-tac-toe.html", "⭕ Tic-Tac-Toe");
         } else if (gameType === "tricky-cup" && gamesUnlocked >= 2) {
           closeGameNotification();
-          openGame("/games/Tricky-Cup.html", "🏆 Tricky Cup");
+          openGame("Tricky-Cup.html", "🏆 Tricky Cup");
         } else if (gameType === "memory-match" && gamesUnlocked >= 3) {
           closeGameNotification();
           openGame("Memory-Match.html", "🧠 Memory Match");
