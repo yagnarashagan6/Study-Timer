@@ -1,0 +1,92 @@
+[build]
+  # Publish directory (where your built site files are located)
+  publish = "."
+  
+  # Build command (not needed for static HTML sites, but can be useful for future)
+  # command = "echo 'No build process needed for static HTML'"
+
+[build.environment]
+  # Environment variables (if needed in the future)
+  NODE_VERSION = "18"
+
+# Redirect rules
+[[redirects]]
+  # Redirect root to your main Study Timer app
+  from = "/"
+  to = "/games/Study-Timer.html"
+  status = 200
+
+[[redirects]]
+  # Redirect /study to main app
+  from = "/study"
+  to = "/games/Study-Timer.html"
+  status = 200
+
+[[redirects]]
+  # Redirect /memory to Memory Match game
+  from = "/memory"
+  to = "/games/Memory-Match.html"
+  status = 200
+
+[[redirects]]
+  # Redirect /tictactoe to Tic Tac Toe game
+  from = "/tictactoe"
+  to = "/games/tic-tac-toe.html"
+  status = 200
+
+[[redirects]]
+  # Redirect /tricky to Tricky Cup game
+  from = "/tricky"
+  to = "/games/Tricky-Cup.html"
+  status = 200
+
+# Headers for better performance and security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Performance headers
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    # HTML files should be cached for shorter periods
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/logo/*"
+  [headers.values]
+    # Images can be cached for longer
+    Cache-Control = "public, max-age=31536000"
+
+# Error pages (optional)
+# [[redirects]]
+#   from = "/*"
+#   to = "/404.html"
+#   status = 404
+
+# Branch-specific deploy settings (optional)
+[context.production]
+  publish = "."
+
+[context.deploy-preview]
+  publish = "."
+
+[context.branch-deploy]
+  publish = "."
