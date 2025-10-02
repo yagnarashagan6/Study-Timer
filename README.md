@@ -318,9 +318,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact & Support
 
 - **Issues**: Please report bugs and feature requests via GitHub Issues
-- **Research Inquiries**: [Add your email for academic collaboration]
-- **Educational Partnerships**: [Add contact for schools and institutions]
-- **General Questions**: [Add general contact information]
+- **General Questions**: yaknarashgan2@gmail.com
 
 ---
 
