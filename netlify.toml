@@ -64,6 +64,8 @@
   [headers.values]
     # Game files should allow iframe embedding and have minimal caching
     Cache-Control = "public, max-age=60"
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/*.css"

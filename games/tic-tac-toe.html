@@ -41,8 +41,23 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        overflow: hidden;
+        overflow: auto;
         perspective: 1000px;
+      }
+
+      /* Iframe compatibility */
+      @media (max-height: 600px) {
+        body {
+          min-height: 600px;
+          overflow-y: auto;
+        }
+      }
+
+      /* When inside iframe */
+      body.iframe-mode {
+        min-height: 100%;
+        height: 100%;
+        overflow: auto;
       }
 
       /* --- 2. Screen Management --- */
@@ -364,6 +379,11 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        // Detect if running in iframe and adjust styling
+        if (window.self !== window.top) {
+          document.body.classList.add("iframe-mode");
+        }
+
         // --- 1. DOM Elements & State Variables ---
         const startScreen = document.getElementById("start-screen");
         const gameScreen = document.getElementById("game-screen");

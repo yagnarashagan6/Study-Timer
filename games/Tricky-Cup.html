@@ -16,8 +16,24 @@
         padding: 0;
         font-family: "Arial", sans-serif;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        overflow: hidden;
+        overflow: auto;
         user-select: none;
+        min-height: 100vh;
+      }
+
+      /* Iframe compatibility */
+      @media (max-height: 600px) {
+        body {
+          min-height: 600px;
+          overflow-y: auto;
+        }
+      }
+
+      /* When inside iframe */
+      body.iframe-mode {
+        min-height: 100%;
+        height: 100%;
+        overflow: auto;
       }
 
       canvas {
@@ -494,6 +510,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
 
+    <script>
+      // Detect if running in iframe and adjust styling
+      if (window.self !== window.top) {
+        document.addEventListener("DOMContentLoaded", () => {
+          document.body.classList.add("iframe-mode");
+        });
+      }
+    </script>
     <script>
       gsap.registerPlugin(MotionPathPlugin);
 

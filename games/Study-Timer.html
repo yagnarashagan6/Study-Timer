@@ -1832,13 +1832,13 @@
       function playGameFromNotification(gameType) {
         if (gameType === "tic-tac-toe") {
           closeGameNotification();
-          openGame("tic-tac-toe.html", "⭕ Tic-Tac-Toe");
+          openGame("/games/tic-tac-toe.html", "⭕ Tic-Tac-Toe");
         } else if (gameType === "tricky-cup" && gamesUnlocked >= 2) {
           closeGameNotification();
-          openGame("Tricky-Cup.html", "🏆 Tricky Cup");
+          openGame("/games/Tricky-Cup.html", "🏆 Tricky Cup");
         } else if (gameType === "memory-match" && gamesUnlocked >= 3) {
           closeGameNotification();
-          openGame("Memory-Match.html", "🧠 Memory Match");
+          openGame("/games/Memory-Match.html", "🧠 Memory Match");
         }
       }
 
