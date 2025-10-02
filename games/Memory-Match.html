@@ -47,6 +47,8 @@
         min-height: 100vh;
         overflow: auto;
         perspective: 1200px;
+        margin: 0;
+        padding: 0;
       }
 
       /* Iframe compatibility */
@@ -62,72 +64,78 @@
         min-height: 100%;
         height: 100%;
         overflow: auto;
-        padding: 20px 10px;
-        padding-top: 50px;
+        padding: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
       }
 
-      body.iframe-mode .memory-board {
-        max-width: 95%;
-        max-height: calc(100vh - 200px);
-      }
-
       body.iframe-mode .screen {
-        margin-top: 40px;
-        padding-top: 20px;
-        position: relative;
+        position: static;
         top: auto;
         left: auto;
         height: auto;
-        min-height: calc(100vh - 100px);
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
         justify-content: center;
         align-items: center;
+        min-height: auto;
       }
 
       body.iframe-mode #game-screen {
-        margin-top: 30px;
-        padding-top: 20px;
-        gap: 25px;
+        gap: 15px;
+        padding: 10px;
       }
 
       body.iframe-mode #start-screen {
-        margin-top: 30px;
-        padding-top: 20px;
+        padding: 20px;
       }
 
       body.iframe-mode #game-board {
-        margin-top: 10px;
+        margin: 0 auto;
+        max-width: 100%;
+      }
+
+      body.iframe-mode .hud {
+        gap: 10px;
+        margin-bottom: 15px;
       }
 
       /* Mobile responsive adjustments for iframe */
       @media (max-width: 768px) {
         body.iframe-mode {
-          padding-top: 40px;
-          padding: 15px 10px;
+          padding: 10px 5px;
         }
 
         body.iframe-mode .screen {
-          margin-top: 30px;
-          padding-top: 15px;
-          min-height: calc(100vh - 80px);
+          padding: 15px 10px;
+          max-width: 100%;
         }
 
         body.iframe-mode #game-screen {
-          margin-top: 25px;
-          gap: 15px;
-          padding-top: 15px;
+          gap: 10px;
+          padding: 10px 5px;
         }
 
         body.iframe-mode #start-screen {
-          margin-top: 25px;
-          padding-top: 15px;
+          padding: 15px 10px;
         }
 
-        body.iframe-mode .memory-board {
-          max-width: 90%;
-          max-height: calc(100vh - 180px);
+        body.iframe-mode #game-board {
+          margin: 0 auto;
+          max-width: 95%;
+        }
+
+        body.iframe-mode .hud {
+          gap: 8px;
+          margin-bottom: 10px;
+        }
+
+        body.iframe-mode #start-screen .title {
+          font-size: clamp(2rem, 8vw, 3rem);
+          margin-bottom: 20px;
         }
       }
 
@@ -135,8 +143,8 @@
       .screen {
         display: none;
         width: 100%;
-        height: 100%;
-        position: absolute;
+        height: 100vh;
+        position: fixed;
         top: 0;
         left: 0;
         justify-content: center;
@@ -162,6 +170,10 @@
       }
 
       /* --- 3. Start Menu Screen --- */
+      #start-screen {
+        text-align: center;
+      }
+
       #start-screen .title {
         font-family: var(--font-title);
         font-size: clamp(3rem, 10vw, 5rem);
@@ -176,6 +188,7 @@
         gap: 15px;
         width: 100%;
         max-width: 300px;
+        margin: 0 auto;
       }
 
       /* Glassmorphism Button Style */

@@ -799,6 +799,7 @@
         align-items: center;
         flex-direction: column;
         padding: 20px;
+        box-sizing: border-box;
       }
 
       .game-container-overlay.show {
@@ -911,6 +912,8 @@
         box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
         overflow: hidden;
         transition: background 0.3s ease;
+        display: block;
+        margin: 0 auto;
       }
 
       @keyframes loading {
@@ -945,6 +948,11 @@
         .game-iframe {
           height: calc(100vh - 180px);
           min-height: 400px;
+          max-width: 100%;
+        }
+
+        .game-container-overlay {
+          padding: 10px;
         }
       }
 
@@ -1878,7 +1886,7 @@
           openGame("/games/Tricky-Cup.html", "🏆 Tricky Cup");
         } else if (gameType === "memory-match" && gamesUnlocked >= 3) {
           closeGameNotification();
-          openGame("/games/Memory-Match.html", "🧠 Memory Match");
+          openGame("Memory-Match.html", "🧠 Memory Match");
         }
       }
 
